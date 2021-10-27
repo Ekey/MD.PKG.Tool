@@ -73,7 +73,7 @@ namespace MD.Unpacker
 
         public static UInt64 iGetHash(String m_String, UInt64 dwHash = 0xFFFFFFFFFFFFFFFF)
         {
-            UInt64 dwLength = (UInt64)m_String.Length;
+            Int32 dwLength = m_String.Length;
             Int32 i = 0;
             do
             {
