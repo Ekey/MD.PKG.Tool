@@ -6,52 +6,35 @@ namespace MD.Unpacker
 {
     class PkgUnpack
     {
-        static List<PkgEntry> m_EntryTable = new List<PkgEntry>();
+        private static List<PkgEntry> m_EntryTable = new List<PkgEntry>();
 
         public static void iDoIt(String m_Archive, String m_DstFolder)
         {
             PkgHashList.iLoadProject();
             using (FileStream TPkgStream = File.OpenRead(m_Archive))
             {
-                var lpHeader = TPkgStream.ReadBytes(12);
                 var m_Header = new PkgHeader();
 
-                using (var THeaderReader = new MemoryStream(lpHeader))
+                m_Header.dwTableSize = TPkgStream.ReadInt32();
+                m_Header.dwArchiveSize = TPkgStream.ReadInt32();
+                m_Header.dwTotalFiles = TPkgStream.ReadInt32();
+
+                if (m_Header.dwTableSize + m_Header.dwArchiveSize + 4 != TPkgStream.Length)
                 {
-                    m_Header.dwTableSize = THeaderReader.ReadInt32();
-                    m_Header.dwArchiveSize = THeaderReader.ReadInt32();
-                    m_Header.dwTotalFiles = THeaderReader.ReadInt32();
-
-                    if (m_Header.dwTableSize + m_Header.dwArchiveSize + 4 != TPkgStream.Length)
-                    {
-                        Utils.iSetError("[ERROR]: Invalid PKG archive file");
-                        return;
-                    }
-
-                    THeaderReader.Dispose();
+                    Utils.iSetError("[ERROR]: Invalid PKG archive file");
+                    return;
                 }
 
                 m_EntryTable.Clear();
-                var lpTable = TPkgStream.ReadBytes(m_Header.dwTableSize);
-                using (var TEntryReader = new MemoryStream(lpTable))
+                for (Int32 i = 0; i < m_Header.dwTotalFiles; i++)
                 {
-                    for (Int32 i = 0; i < m_Header.dwTotalFiles; i++)
-                    {
-                        UInt64 dwHash = TEntryReader.ReadUInt64();
-                        UInt32 dwOffset = TEntryReader.ReadUInt32();
-                        UInt32 dwSize = TEntryReader.ReadUInt32();
+                    var m_Entry = new PkgEntry();
 
-                        var TEntry = new PkgEntry
-                        {
-                            dwHash = dwHash,
-                            dwOffset = dwOffset,
-                            dwSize = dwSize,
-                        };
+                    m_Entry.dwHash = TPkgStream.ReadUInt64();
+                    m_Entry.dwOffset = TPkgStream.ReadUInt32();
+                    m_Entry.dwSize = TPkgStream.ReadUInt32();
 
-                        m_EntryTable.Add(TEntry);
-                    }
-
-                    TEntryReader.Dispose();
+                    m_EntryTable.Add(m_Entry);
                 }
 
                 foreach (var m_Entry in m_EntryTable)

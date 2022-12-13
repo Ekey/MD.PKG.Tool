@@ -5,11 +5,14 @@ namespace MD.Unpacker
 {
     class Program
     {
-        static void Main(string[] args)
+        private static String m_Title = "Metroid Dread PKG Unpacker";
+
+        static void Main(String[] args)
         {
+            Console.Title = m_Title;
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Metroid Dread PKG Unpacker");
-            Console.WriteLine("(c) 2021 Ekey (h4x0r) / v{0}\n", Utils.iGetApplicationVersion());
+            Console.WriteLine(m_Title);
+            Console.WriteLine("(c) 2022 Ekey (h4x0r) / v{0}\n", Utils.iGetApplicationVersion());
             Console.ResetColor();
 
             if (args.Length != 2)
@@ -22,7 +25,7 @@ namespace MD.Unpacker
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("[Examples]");
-                Console.WriteLine("    MD.Unpacker E:\\Games\\MHR\\re_chunk_000.pak D:\\Unpacked");
+                Console.WriteLine("    MD.Unpacker E:\\Games\\MD\\Romfs\\packs\\players\\samus.pkg D:\\Unpacked");
                 Console.ResetColor();
                 return;
             }

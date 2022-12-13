@@ -71,20 +71,22 @@ namespace MD.Unpacker
             0xA707DB9ACF80C06D, 0x14299724CC279F02, 0x5383EDCD67C06036, 0xE0ADA17364673F59
         };
 
-        public static UInt64 iGetHash(String m_String, UInt64 dwHash = 0xFFFFFFFFFFFFFFFF)
+        public static UInt64 iGetHash(String m_String)
         {
+            UInt64 dwHash = 0xFFFFFFFFFFFFFFFF;
+
             Int32 dwLength = m_String.Length;
             Int32 i = 0;
             do
             {
-                UInt64 A = crc64_table[(Byte)(m_String[i + 0] ^ dwHash)] ^ (dwHash >> 8);
-                UInt64 B = crc64_table[(Byte)(m_String[i + 1] ^ A)] ^ (A >> 8);
-                UInt64 C = crc64_table[(Byte)(m_String[i + 2] ^ B)] ^ (B >> 8);
-                UInt64 D = crc64_table[(Byte)(m_String[i + 3] ^ C)] ^ (C >> 8);
-                UInt64 E = crc64_table[(Byte)(m_String[i + 4] ^ D)] ^ (D >> 8);
-                UInt64 F = crc64_table[(Byte)(m_String[i + 5] ^ E)] ^ (E >> 8);
-                UInt64 G = crc64_table[(Byte)(m_String[i + 6] ^ F)] ^ (F >> 8);
-                dwHash = crc64_table[(Byte)(m_String[i + 7] ^ G)] ^ (G >> 8);
+                dwHash = crc64_table[(Byte)(m_String[i + 0] ^ dwHash)] ^ (dwHash >> 8);
+                dwHash = crc64_table[(Byte)(m_String[i + 1] ^ dwHash)] ^ (dwHash >> 8);
+                dwHash = crc64_table[(Byte)(m_String[i + 2] ^ dwHash)] ^ (dwHash >> 8);
+                dwHash = crc64_table[(Byte)(m_String[i + 3] ^ dwHash)] ^ (dwHash >> 8);
+                dwHash = crc64_table[(Byte)(m_String[i + 4] ^ dwHash)] ^ (dwHash >> 8);
+                dwHash = crc64_table[(Byte)(m_String[i + 5] ^ dwHash)] ^ (dwHash >> 8);
+                dwHash = crc64_table[(Byte)(m_String[i + 6] ^ dwHash)] ^ (dwHash >> 8);
+                dwHash = crc64_table[(Byte)(m_String[i + 7] ^ dwHash)] ^ (dwHash >> 8);
                 dwLength -= 8;
                 i += 8;
             }
@@ -94,10 +96,10 @@ namespace MD.Unpacker
             {
                 do
                 {
-                    UInt64 A = crc64_table[(Byte)(m_String[i + 0] ^ dwHash)] ^ (dwHash >> 8);
-                    UInt64 B = crc64_table[(Byte)(m_String[i + 1] ^ A)] ^ (A >> 8);
-                    UInt64 C = crc64_table[(Byte)(m_String[i + 2] ^ B)] ^ (B >> 8);
-                    dwHash = crc64_table[(Byte)(m_String[i + 3] ^ C)] ^ (C >> 8);
+                    dwHash = crc64_table[(Byte)(m_String[i + 0] ^ dwHash)] ^ (dwHash >> 8);
+                    dwHash = crc64_table[(Byte)(m_String[i + 1] ^ dwHash)] ^ (dwHash >> 8);
+                    dwHash = crc64_table[(Byte)(m_String[i + 2] ^ dwHash)] ^ (dwHash >> 8);
+                    dwHash = crc64_table[(Byte)(m_String[i + 3] ^ dwHash)] ^ (dwHash >> 8);
                     dwLength -= 4;
                     i += 4;
                 }
